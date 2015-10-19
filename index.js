@@ -31,6 +31,7 @@ exports.put = function(key, value, time, timeoutCallback) {
 
   if (!isNaN(record.expire)) {
     record.timeout = setTimeout(function() {
+      delete record.expire;
       exports.del(key);
       if (timeoutCallback) {
         timeoutCallback(key);
