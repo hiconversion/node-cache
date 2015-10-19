@@ -31,7 +31,6 @@ exports.put = function(key, value, time, timeoutCallback) {
 
   if (!isNaN(record.expire)) {
     record.timeout = setTimeout(function() {
-      delete record.expire;
       exports.del(key);
       if (timeoutCallback) {
         timeoutCallback(key);
@@ -50,7 +49,7 @@ exports.del = function(key) {
   var oldRecord = cache[key];
   if (oldRecord) {
     clearTimeout(oldRecord.timeout);
-    if (!isNaN(oldRecord.expire) && oldRecord.expire < Date.now()) {
+    if (!isNaN(oldRecord.expire) && oldRecord.expire > Date.now()) {
       canDelete = false;
     }
   } else {
